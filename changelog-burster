@@ -1,0 +1,71 @@
+#!/bin/ksh
+#
+# changelog-burster
+#
+
+#
+# Utility to take an OpenBSD Changelog from an OpenBSD mirror
+# and separate it into a bunch of commit-* files in date directories
+#
+# Also slaps the date ranges in the file daterange
+#
+# It will purge cvs modules not applicable to making plus.html
+# (ports and www)
+#
+# Optionally it will purge commit's that have a date listed in the
+# file purgedate. This is to help with an in-progress plus.html
+#
+# Created 2019-02-05
+#
+
+PURGE_MODULES="www ports"
+DATE_FILE="daterange"
+PURGEDATE_FILE="purgedate"
+
+CHANGELOG="ChangeLog"
+SPLIT_PREFIX="commit-"
+
+# Make sure it exists
+if [ ! -f $CHANGELOG ]; then
+	echo No such file $CHANGELOG
+	exit 1
+fi
+
+# Harvest the dates into DATE_FILE
+echo -n "Noting dates: "
+grep "Changes by:" $CHANGELOG | awk '{ print $4 }' | uniq > $DATE_FILE
+echo done
+
+# Split the Changelog into thousands of pieces
+# Mwa ha ha ha
+echo -n "Wielding chainsaw: "
+split -a 3 -p "CVSROOT:	/cvs" $CHANGELOG $SPLIT_PREFIX
+echo done
+
+# Get rid of modules not documented in plus.html
+echo -n "Purging unworthy modules: "
+for module in $PURGE_MODULES;
+do
+	echo -n "${module} "
+	grep -l "Module name:	${module}" ${SPLIT_PREFIX}* | xargs rm
+done
+echo done
+
+# Create per-day directory tree for commits
+echo -n "Creating date directories: "
+for day in $( cat $DATE_FILE );
+do
+	mkdir -p ${day}
+done
+echo done
+
+# Shove commit files in correct directory
+echo -n "Filing commits into folders: "
+for day in $( cat $DATE_FILE );
+do
+	for file in $( grep -l "${day}" ${SPLIT_PREFIX}* );
+	do
+		mv ${file} ${day}/
+	done
+done
+echo done
