@@ -48,8 +48,9 @@ echo done
 
 # Split the Changelog into thousands of pieces
 # Mwa ha ha ha
+SPLIT_STRING=$( echo "CVSROOT:\t/cvs" )
 echo -n "Wielding chainsaw: "
-split -a 3 -p "CVSROOT:	/cvs" $CHANGELOG $SPLIT_PREFIX
+split -a 3 -p "$SPLIT_STRING" $CHANGELOG $SPLIT_PREFIX
 echo done
 
 # Get rid of modules not documented in plus.html
@@ -57,7 +58,8 @@ echo -n "Purging unworthy modules: "
 for module in $PURGE_MODULES;
 do
 	echo -n "${module} "
-	grep -l "Module name:	${module}" ${SPLIT_PREFIX}* | xargs rm
+	GREP_STRING="$( echo "Module name:\t${module}" )"
+	grep -l "${GREP_STRING}" ${SPLIT_PREFIX}* | xargs rm
 done
 echo done
 
