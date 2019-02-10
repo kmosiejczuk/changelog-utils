@@ -18,12 +18,22 @@
 # Created 2019-02-05
 #
 
-PURGE_MODULES="www ports"
-DATE_FILE="daterange"
-PURGEDATE_FILE="purgedate"
+if [ x${PURGE_MODULES} = x ]; then
+	PURGE_MODULES="www ports"
+fi
+if [ x${DATE_FILE} = x ]; then
+	DATE_FILE="daterange"
+fi
+if [ x${PURGEDATE_FILE} = x ]; then
+	PURGEDATE_FILE="purgedate"
+fi
 
-CHANGELOG="ChangeLog"
-SPLIT_PREFIX="commit-"
+if [ x${CHANGELOG} = x ]; then
+	CHANGELOG="ChangeLog"
+fi
+if [ x${SPLIT_PREFIX} = x ]; then
+	SPLIT_PREFIX="commit-"
+fi
 
 # Make sure it exists
 if [ ! -f $CHANGELOG ]; then
