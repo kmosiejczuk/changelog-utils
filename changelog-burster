@@ -55,7 +55,7 @@ echo done
 echo -n "Creating date directories: "
 for day in $( cat $DATE_FILE );
 do
-	mkdir -p ${day}
+	mkdir -p $( echo ${day} | sed 's/\//-/g' )
 done
 echo done
 
@@ -63,6 +63,7 @@ echo done
 echo -n "Filing commits into folders: "
 for day in $( cat $DATE_FILE );
 do
-	grep -l "${day}" ${SPLIT_PREFIX}* | xargs -J % mv % ${day}/
+	daydir=$( echo ${day} | sed 's/\//-/g' )
+	grep -l "${day}" ${SPLIT_PREFIX}* | xargs -J % mv % ${daydir}/
 done
 echo done
