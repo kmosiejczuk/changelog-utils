@@ -63,9 +63,6 @@ echo done
 echo -n "Filing commits into folders: "
 for day in $( cat $DATE_FILE );
 do
-	for file in $( grep -l "${day}" ${SPLIT_PREFIX}* );
-	do
-		mv ${file} ${day}/
-	done
+	grep -l "${day}" ${SPLIT_PREFIX}* | xargs -J % mv % ${day}/
 done
 echo done
