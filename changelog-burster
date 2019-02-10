@@ -57,7 +57,7 @@ echo -n "Purging unworthy modules: "
 for module in $PURGE_MODULES;
 do
 	echo -n "${module} "
-	grep -l "Module name:	${module}" ${SPLIT_PREFIX}* | xargs rm
+	grep -l "Module name:	${module}" ${SPLIT_PREFIX}* | xargs -r rm
 done
 echo done
 
@@ -74,6 +74,6 @@ echo -n "Filing commits into folders: "
 for day in $( cat $DATE_FILE );
 do
 	daydir=$( echo ${day} | sed 's/\//-/g' )
-	grep -l "${day}" ${SPLIT_PREFIX}* | xargs -J % mv % ${daydir}/
+	grep -l "${day}" ${SPLIT_PREFIX}* | xargs -r -J % mv % ${daydir}/
 done
 echo done
