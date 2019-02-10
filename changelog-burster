@@ -5,14 +5,14 @@
 
 #
 # Utility to take an OpenBSD Changelog from an OpenBSD mirror
-# and separate it into a bunch of commit-* files in date directories
+# and separate it into a bunch of commit-* files in dated directories
 #
-# Also slaps the date ranges in the file daterange
+# Also slaps the date ranges into the file daterange
 #
 # It will purge cvs modules not applicable to making plus.html
 # (ports and www)
 #
-# Optionally it will purge commit's that have a date listed in the
+# Optionally, it will purge commits that have a date listed in the
 # file purgedate. This is to help with an in-progress plus.html
 #
 # Created 2019-02-05
