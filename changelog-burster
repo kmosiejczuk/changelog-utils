@@ -63,9 +63,20 @@ echo done
 
 # Get rid of modules that are only "sync"
 echo -n "Purging sync-only commits: "
+	grep -l '^sync$' ${SPLIT_PREFIX}* | xargs -r rm
+echo done
 
-grep -l '^sync$' ${SPLIT_PREFIX}* | xargs -r rm
-
+# Remove regress-test-only commits
+echo -n "Purging regression-test-only commits: "
+for file in $( grep -l "^	regress/" ${SPLIT_PREFIX}* );
+do
+	if ( grep -v regress $file | grep -q "^	.*/.*$" ); then
+		# Gross but haven't figured out how to negate if condition
+		echo > /dev/null
+	else
+		rm $file
+	fi
+done
 echo done
 
 # Create per-day directory tree for commits
