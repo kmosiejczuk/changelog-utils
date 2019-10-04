@@ -61,6 +61,13 @@ do
 done
 echo done
 
+# Get rid of modules that are only "sync"
+echo -n "Purging sync-only commits: "
+
+grep -l '^sync$' ${SPLIT_PREFIX}* | xargs -r rm
+
+echo done
+
 # Create per-day directory tree for commits
 echo -n "Creating date directories: "
 for day in $( cat $DATE_FILE );
