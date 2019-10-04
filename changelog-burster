@@ -35,7 +35,7 @@ if [ x${SPLIT_PREFIX} = x ]; then
 	SPLIT_PREFIX="commit-"
 fi
 
-# Make sure it exists
+# Make sure the changelog exists
 if [ ! -f $CHANGELOG ]; then
 	echo No such file $CHANGELOG
 	exit 1
