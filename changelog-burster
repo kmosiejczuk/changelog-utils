@@ -62,12 +62,17 @@ done
 echo done
 
 # Get rid of modules that are only "sync"
-echo -n "Purging sync-only commits: "
+echo -n "Forcing out of sync: "
 	grep -l '^sync$' ${SPLIT_PREFIX}* | xargs -r rm
 echo done
 
+# Get rid of modules that are only "regen"
+echo -n "Applying flame: "
+        grep -l '^regen$' ${SPLIT_PREFIX}* | xargs -r rm
+echo done
+
 # Remove regress-test-only commits
-echo -n "Purging regression-test-only commits: "
+echo -n "Caution will not save you"
 for file in $( grep -l "^	regress/" ${SPLIT_PREFIX}* );
 do
 	if ( grep -v regress $file | grep -q "^	.*/.*$" ); then
@@ -77,10 +82,10 @@ do
 		rm $file
 	fi
 done
-echo done
+echo !!!
 
 # Create per-day directory tree for commits
-echo -n "Creating date directories: "
+echo -n "Creating directories: "
 for day in $( cat $DATE_FILE );
 do
 	mkdir -p $( echo ${day} | sed 's/\//-/g' )
@@ -88,10 +93,14 @@ done
 echo done
 
 # Shove commit files in correct directory
-echo -n "Filing commits into folders: "
+echo -n "Filing commits: "
 for day in $( cat $DATE_FILE );
 do
 	daydir=$( echo ${day} | sed 's/\//-/g' )
 	grep -l "${day}" ${SPLIT_PREFIX}* | xargs -r -J % mv % ${daydir}/
 done
 echo done
+echo -n "Victims remaining: "
+grep CVSROOT 2*/* | wc -l
+echo -n "Let's play."
+echo
