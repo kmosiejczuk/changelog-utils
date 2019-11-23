@@ -75,10 +75,7 @@ echo done
 echo -n "Caution will not save you"
 for file in $( grep -l "^	regress/" ${SPLIT_PREFIX}* );
 do
-	if ( grep -v regress $file | grep -q "^	.*/.*$" ); then
-		# Gross but haven't figured out how to negate if condition
-		echo > /dev/null
-	else
+	if [ ! $( grep -v regress $file | grep -q "^	.*/.*$" ) ]; then
 		rm $file
 	fi
 done
